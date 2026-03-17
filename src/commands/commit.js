@@ -76,7 +76,8 @@ function App({ opts }) {
       "Analyzing diff with " + PROVIDERS[config.provider]?.label + "…",
     );
     try {
-      const diff = options.head ? getHeadDiff() : getStagedDiff();
+      const diff = options.head ? getHeadDiff().slice(0, 10000) : getStagedDiff().slice(0, 10000);
+
       if (!diff.trim()) {
         setError(
           options.head
