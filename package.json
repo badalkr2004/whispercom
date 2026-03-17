@@ -7,8 +7,8 @@
     "commit-ai": "./src/index.js"
   },
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "node --watch src/index.js"
+    "start": "bun run src/index.js",
+    "dev": "bun --watch src/index.js"
   },
   "dependencies": {
     "ai": "^4.3.16",
@@ -36,5 +36,8 @@
     "conventional-commits",
     "tui"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "tsx": "^4.21.0"
+  }
 }
