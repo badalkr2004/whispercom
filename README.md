@@ -25,8 +25,8 @@ Professional AI-powered git CLI built with **Ink** (React for terminals) and the
 ## Install
 
 ```bash
-npm install
-npm install -g .
+npm install whispercom
+npm install -g whispercom
 ```
 
 ## Setup
@@ -102,27 +102,3 @@ commit-ai branch
 | `↑↓`    | Navigate      |
 | `enter` | Switch branch |
 | `esc`   | Cancel        |
-
-## Project structure
-
-```
-src/
-  index.js              CLI entry point + argument routing
-  core/
-    git.js              All git operations (diff, log, stage, branch)
-    ai.js               Vercel AI SDK — generate commit messages
-    config.js           Provider registry, config load/save
-    theme.js            Colors, symbols, shared constants
-  ui/
-    CommitPicker.js     AI suggestion picker (Ink)
-    CommitGraph.js      Commit history browser + ASCII graph (Ink)
-    FileStagingUI.js    Interactive file staging (Ink)
-    BranchSwitcher.js   Fuzzy branch picker (Ink)
-    ConfigWizard.js     Provider/model setup (Ink)
-    StatusBar.js        Shared chrome — header bar + key hints
-  commands/
-    commit.js           commit command orchestration
-    log.js              log command
-    branch.js           branch command
-    config.js           configure command
-```
