@@ -28,14 +28,6 @@ export function getHeadDiff() {
   return run("git diff HEAD");
 }
 
-export function getStagedStat() {
-  return run("git diff --staged --stat");
-}
-
-export function getHeadStat() {
-  return run("git diff HEAD --stat");
-}
-
 export function getCurrentBranch() {
   return run("git branch --show-current", "HEAD");
 }
@@ -86,7 +78,10 @@ export function stageFile(filePath) {
 
 export function unstageFile(filePath) {
   try {
-    execSync(`git reset HEAD ${JSON.stringify(filePath)}`, { stdio: "pipe" });
+    // git restore --staged replaces the deprecated `git reset HEAD <file>`
+    execSync(`git restore --staged ${JSON.stringify(filePath)}`, {
+      stdio: "pipe",
+    });
     return true;
   } catch {
     return false;

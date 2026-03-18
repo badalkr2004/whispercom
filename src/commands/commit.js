@@ -76,7 +76,9 @@ function App({ opts }) {
       "Analyzing diff with " + PROVIDERS[config.provider]?.label + "…",
     );
     try {
-      const diff = options.head ? getHeadDiff().slice(0, 10000) : getStagedDiff().slice(0, 10000);
+      const diff = options.head
+        ? getHeadDiff().slice(0, 10000)
+        : getStagedDiff().slice(0, 10000);
 
       if (!diff.trim()) {
         setError(
@@ -122,9 +124,8 @@ function App({ opts }) {
   }
 
   function handleStagingDone(stagedPaths) {
-    // Apply staging changes
-    const currentFiles = getUnstagedFiles();
-    currentFiles.forEach((f) => {
+    // Use the current files state — do NOT re-fetch to avoid race conditions
+    files.forEach((f) => {
       if (stagedPaths.includes(f.path) && !f.staged) stageFile(f.path);
       if (!stagedPaths.includes(f.path) && f.staged) unstageFile(f.path);
     });
@@ -152,7 +153,7 @@ function App({ opts }) {
     return (
       <Box paddingX={1} paddingY={1} flexDirection="column" gap={1}>
         <Text color="red">✖ {error}</Text>
-        <Text dimColor>Run commit-ai --help for usage.</Text>
+        <Text dimColor>Run whis --help for usage.</Text>
       </Box>
     );
   }

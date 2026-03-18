@@ -1,16 +1,20 @@
-# commit-ai v3
+# whispercom
+
+![npm](https://img.shields.io/npm/v/whispercom)
+![license](https://img.shields.io/npm/l/whispercom)
+![node](https://img.shields.io/node/v/whispercom)
 
 Professional AI-powered git CLI built with **Ink** (React for terminals) and the **Vercel AI SDK**.
 
 ## Features
 
-| Command                    | What it does                                         |
-| -------------------------- | ---------------------------------------------------- |
-| `commit-ai commit`         | AI commit message picker with Ink TUI                |
-| `commit-ai commit --stage` | Interactive file staging → commit                    |
-| `commit-ai log`            | Full commit history browser with colored ASCII graph |
-| `commit-ai branch`         | Fuzzy branch switcher                                |
-| `commit-ai configure`      | Provider + model setup wizard                        |
+| Command               | What it does                                         |
+| --------------------- | ---------------------------------------------------- |
+| `whis commit`         | AI commit message picker with Ink TUI                |
+| `whis commit --stage` | Interactive file staging → commit                    |
+| `whis log`            | Full commit history browser with colored ASCII graph |
+| `whis branch`         | Fuzzy branch switcher                                |
+| `whis configure`      | Provider + model setup wizard                        |
 
 ## Supported AI providers
 
@@ -25,18 +29,17 @@ Professional AI-powered git CLI built with **Ink** (React for terminals) and the
 ## Install
 
 ```bash
-npm install whispercom
 npm install -g whispercom
 ```
 
 ## Setup
 
 ```bash
-# Set your API key
+# Set your API key (example: Anthropic)
 export ANTHROPIC_API_KEY=sk-ant-...
 
-# Configure provider + model (saved to ~/.config/commit-ai/config.json)
-commit-ai configure
+# Configure provider + model (saved to ~/.config/whispercom/config.json)
+whis configure
 ```
 
 ## Usage
@@ -44,22 +47,22 @@ commit-ai configure
 ```bash
 # Generate AI commit message for staged changes
 git add -p
-commit-ai
+whis
 
 # Stage files interactively, then generate
-commit-ai --stage
+whis --stage
 
 # Diff against HEAD instead
-commit-ai --head
+whis --head
 
 # Get 5 suggestions
-commit-ai --count 5
+whis --count 5
 
 # Browse commit graph
-commit-ai log
+whis log
 
 # Switch branches
-commit-ai branch
+whis branch
 ```
 
 ## TUI Controls
@@ -89,6 +92,7 @@ commit-ai branch
 
 | Key     | Action            |
 | ------- | ----------------- |
+| `↑↓`    | Navigate          |
 | `space` | Toggle file       |
 | `a`     | Toggle all        |
 | `c`     | Proceed to commit |
@@ -102,3 +106,28 @@ commit-ai branch
 | `↑↓`    | Navigate      |
 | `enter` | Switch branch |
 | `esc`   | Cancel        |
+
+## Configuration file
+
+Settings are stored in `~/.config/whispercom/config.json`:
+
+```json
+{
+  "provider": "anthropic",
+  "model": "claude-sonnet-4-5"
+}
+```
+
+Run `whis configure` at any time to change provider or model.
+
+## Contributing
+
+1. Clone the repo  
+2. Run `npm install`  
+3. Run locally: `node src/index.js --help`  
+
+To add a new AI provider, add an entry to the `PROVIDERS` map in `src/core/config.js`.
+
+## License
+
+MIT

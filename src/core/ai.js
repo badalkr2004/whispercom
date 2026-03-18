@@ -55,6 +55,20 @@ ${diff}
     .replace(/```\s*$/i, "")
     .trim();
 
-  const parsed = JSON.parse(cleaned);
+  let parsed;
+  try {
+    parsed = JSON.parse(cleaned);
+  } catch {
+    throw new Error(
+      "AI returned unparseable output. Try again or switch to a different model."
+    );
+  }
+
+  if (!Array.isArray(parsed) || parsed.length === 0) {
+    throw new Error(
+      "AI returned an empty or invalid suggestion list. Try again."
+    );
+  }
+
   return parsed.map((s) => ({ ...s, body: s.body || "" }));
 }

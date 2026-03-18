@@ -45,7 +45,7 @@ function BranchApp({ branches, current }) {
 
 export async function runBranch() {
   if (!isGitRepo()) {
-    console.error("✖  Not inside a git repository.");
+    process.stderr.write("✖  Not inside a git repository.\n");
     process.exit(1);
   }
 

@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import * as os from "os";
 
-export const CONFIG_DIR = path.join(os.homedir(), ".config", "commit-ai");
+export const CONFIG_DIR = path.join(os.homedir(), ".config", "whispercom");
 export const CONFIG_FILE = path.join(CONFIG_DIR, "config.json");
 
 export const PROVIDERS = {
@@ -11,17 +11,17 @@ export const PROVIDERS = {
     envKey: "ANTHROPIC_API_KEY",
     models: [
       {
-        id: "claude-opus-4-5-20250514",
+        id: "claude-opus-4-5",
         label: "Claude Opus 4.5",
         note: "most capable",
       },
       {
-        id: "claude-sonnet-4-5-20250929",
+        id: "claude-sonnet-4-5",
         label: "Claude Sonnet 4.5",
         note: "balanced",
       },
       {
-        id: "claude-haiku-4-5-20251001",
+        id: "claude-haiku-4-5",
         label: "Claude Haiku 4.5",
         note: "fastest",
       },
@@ -50,7 +50,7 @@ export const PROVIDERS = {
     models: [
       { id: "gemini-2.0-flash", label: "Gemini 2.0 Flash", note: "fast" },
       {
-        id: "gemini-2.0-flash-thinking",
+        id: "gemini-2.0-flash-thinking-exp",
         label: "Gemini 2.0 Thinking",
         note: "reasoning",
       },

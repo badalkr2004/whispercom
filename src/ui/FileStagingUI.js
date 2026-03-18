@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import { Box, Text, useInput } from "ink";
 import { SYMBOLS, STATUS_COLORS } from "../core/theme.js";
 import { KeyHint, StatusBar } from "./StatusBar.js";
@@ -71,7 +71,7 @@ export function FileStagingUI({ files: initialFiles, branch, onDone, onQuit }) {
               {" "}
               staged
             </Text>
-            {staged.map((f, i) => (
+            {staged.map((f) => (
               <FileRow
                 key={f.path}
                 file={f}

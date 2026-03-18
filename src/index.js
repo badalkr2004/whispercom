@@ -1,7 +1,7 @@
-#!/usr/bin/env bun
+
 
 const HELP = `
-\x1b[36m\x1b[1mcommit-ai\x1b[0m v3  —  professional AI git CLI
+\x1b[36m\x1b[1mwhis\x1b[0m v1.0.0  —  professional AI git CLI
 
 \x1b[1mCommands:\x1b[0m
   \x1b[33mcommit\x1b[0m             Generate AI commit message (default)
@@ -11,7 +11,7 @@ const HELP = `
 
 \x1b[1mCommit flags:\x1b[0m
   \x1b[33m--stage\x1b[0m / \x1b[33m-s\x1b[0m        Interactive file staging before commit
-  \x1b[33m--head\x1b[0m             Diff against HEAD (includes   staged)
+  \x1b[33m--head\x1b[0m             Diff against HEAD (includes staged)
   \x1b[33m--count\x1b[0m \x1b[90m<n>\x1b[0m        Number of suggestions \x1b[90m(default: 3)\x1b[0m
 
 \x1b[1mLog flags:\x1b[0m
@@ -21,7 +21,7 @@ const HELP = `
   Anthropic · OpenAI · Google Gemini · Mistral AI · Groq
 
 \x1b[1mFirst run:\x1b[0m
-  commit-ai configure
+  whis configure
 `;
 
 function parseArgs(argv) {

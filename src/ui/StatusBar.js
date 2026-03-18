@@ -2,6 +2,8 @@ import React from "react";
 import { Box, Text } from "ink";
 import { SYMBOLS } from "../core/theme.js";
 
+const APP_NAME = "whis";
+
 export function StatusBar({ branch, provider, model, message }) {
   return (
     <Box
@@ -12,7 +14,7 @@ export function StatusBar({ branch, provider, model, message }) {
     >
       <Box gap={2}>
         <Text color="cyan" bold>
-          commit-ai
+          {APP_NAME}
         </Text>
         {branch && (
           <Box gap={1}>

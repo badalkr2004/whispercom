@@ -1,15 +1,23 @@
 {
   "name": "whispercom",
-  "version": "3.0.1",
+  "version": "1.0.0",
   "description": "Professional AI-powered git CLI — commit messages, history browser, commit graph, file staging, branch switcher",
   "type": "module",
+  "main": "dist/index.js",
   "bin": {
-    "whispercom": "src/index.js"
+    "whis": "dist/index.js"
   },
   "scripts": {
-    "start": "bun run src/index.js",
-    "dev": "bun --watch src/index.js"
+    "build": "node build.mjs",
+    "prepublishOnly": "npm run build",
+    "dev": "node build.mjs --watch"
   },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist/"
+  ],
   "dependencies": {
     "@ai-sdk/anthropic": "^1.2.12",
     "@ai-sdk/google": "^1.2.18",
@@ -21,12 +29,12 @@
     "ink-spinner": "^5.0.0",
     "react": "^18.3.1"
   },
+  "devDependencies": {
+    "esbuild": "^0.25.12"
+  },
   "engines": {
     "node": ">=18.0.0"
   },
-  "files": [
-    "src/"
-  ],
   "keywords": [
     "git",
     "commit",
@@ -36,8 +44,14 @@
     "conventional-commits",
     "tui"
   ],
+  "author": "badalkr2004",
   "license": "MIT",
-  "devDependencies": {
-    "tsx": "^4.21.0"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/badalkr2004/whispercom.git"
+  },
+  "homepage": "https://github.com/badalkr2004/whispercom#readme",
+  "bugs": {
+    "url": "https://github.com/badalkr2004/whispercom/issues"
   }
 }

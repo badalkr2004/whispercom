@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Box, Text, useInput } from "ink";
 import { SYMBOLS, BRANCH_COLORS } from "../core/theme.js";
 import { KeyHint, StatusBar } from "./StatusBar.js";
@@ -24,7 +24,7 @@ function RefBadge({ name }) {
 function GraphCommitRow({ line, isSelected }) {
   // Parse the raw --graph --oneline --decorate line
   // Format: [graph chars] [hash] ([refs]) subject
-  const graphMatch = line.match(/^([*|\\/ ]+)\s+/);
+  const graphMatch = line.match(/^([*|\/ ]+)\s+/);
   const graphPart = graphMatch ? graphMatch[1] : "";
   const rest = line.slice(graphPart.length);
 
@@ -71,8 +71,6 @@ function GraphCommitRow({ line, isSelected }) {
 }
 
 function CommitDetail({ commit, diff }) {
-  const [showDiff, setShowDiff] = useState(false);
-
   return (
     <Box
       flexDirection="column"
@@ -147,26 +145,39 @@ export function CommitGraph({
   const [diff, setDiff] = useState(null);
   const [loading, setLoading] = useState(false);
   const [mode, setMode] = useState("graph"); // "graph" | "detail"
+  const [loadDiff, setLoadDiff] = useState(null); // hash to load, or null
 
-  const filteredLines = useMemo(
-    () => graphLines.filter((l) => l.trim()),
-    [graphLines],
-  );
-
+  const filteredLines = graphLines.filter((l) => l.trim());
   const visibleLines = filteredLines.slice(page * PAGE, (page + 1) * PAGE);
   const totalPages = Math.ceil(filteredLines.length / PAGE);
 
   // Match selected graph line to a commit
-  const selectedCommit = useMemo(() => {
+  const getSelectedCommit = useCallback(() => {
     const line = filteredLines[page * PAGE + selIdx] ?? "";
     const m = line.match(/\b([0-9a-f]{6,8})\b/i);
     if (!m) return null;
-    return (
-      commits.find((c) => c.short === m[1] || c.hash.startsWith(m[1])) ?? null
-    );
+    return commits.find((c) => c.short === m[1] || c.hash.startsWith(m[1])) ?? null;
   }, [selIdx, page, filteredLines, commits]);
 
-  useInput(async (input, key) => {
+  const selectedCommit = getSelectedCommit();
+
+  // Load diff via useEffect so the input handler stays synchronous
+  useEffect(() => {
+    if (!loadDiff) return;
+    let cancelled = false;
+    setLoading(true);
+    onGetDiff(loadDiff).then((d) => {
+      if (!cancelled) {
+        setDiff(d);
+        setLoading(false);
+        setMode("detail");
+        setLoadDiff(null);
+      }
+    });
+    return () => { cancelled = true; };
+  }, [loadDiff, onGetDiff]);
+
+  useInput((input, key) => {
     if (key.upArrow || input === "k") {
       if (selIdx > 0) setSelIdx((s) => s - 1);
       else if (page > 0) {
@@ -189,11 +200,8 @@ export function CommitGraph({
         setMode("graph");
         return;
       }
-      setLoading(true);
-      const d = await onGetDiff(selectedCommit.hash);
-      setDiff(d);
-      setLoading(false);
-      setMode("detail");
+      // Trigger async diff load via state — keeps input handler sync
+      setLoadDiff(selectedCommit.hash);
     } else if (key.escape || input === "b") {
       if (mode === "detail") {
         setMode("graph");
