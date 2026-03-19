@@ -3,10 +3,10 @@ import { defineConfig } from "vitepress";
 export default defineConfig({
   title: "whispercom",
   description: "Professional AI-powered git CLI for conventional commits",
-  base: "/whispercom/",
+  base: "/",
 
   head: [
-    ["link", { rel: "icon", href: "/whispercom/favicon.svg", type: "image/svg+xml" }],
+    ["link", { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" }],
     ["meta", { name: "theme-color", content: "#7c3aed" }],
     ["meta", { property: "og:type", content: "website" }],
     ["meta", { property: "og:title", content: "whispercom — AI Git CLI" }],
@@ -79,8 +79,7 @@ export default defineConfig({
     },
 
     editLink: {
-      pattern:
-        "https://github.com/badalkr2004/whispercom/edit/main/docs/:path",
+      pattern: "https://github.com/badalkr2004/whispercom/edit/main/docs/:path",
       text: "Edit this page on GitHub",
     },
   },
