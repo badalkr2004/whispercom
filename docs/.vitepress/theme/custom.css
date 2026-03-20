@@ -3,7 +3,7 @@
    ============================================================ */
 
 /* ── Google Fonts ── */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap");
 
 /* ── Brand tokens ── */
 :root {
@@ -12,8 +12,10 @@
   --vp-c-brand-3: #6d28d9;
   --vp-c-brand-soft: rgba(139, 92, 246, 0.14);
 
-  --vp-font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --vp-font-family-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  --vp-font-family-base:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vp-font-family-mono:
+    "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
 
   --wc-glow: 0 0 40px rgba(139, 92, 246, 0.25);
   --wc-glow-sm: 0 0 18px rgba(139, 92, 246, 0.18);
@@ -26,7 +28,7 @@
 }
 
 .dark {
-  --wc-surface: #08060f;          /* same as nav rgba(8,6,15) */
+  --wc-surface: #08060f; /* same as nav rgba(8,6,15) */
   --wc-surface-2: #100d20;
   --wc-border: rgba(139, 92, 246, 0.2);
   /* VitePress reads this for the sidebar AND the nav title area */
@@ -34,10 +36,12 @@
 }
 
 /* ── Global base ── */
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+}
 
 body {
-  font-feature-settings: 'cv11', 'ss01';
+  font-feature-settings: "cv11", "ss01";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -64,13 +68,13 @@ body {
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border-bottom: 1px solid var(--wc-border) !important;
-  background: rgba(250,250,249,0.92) !important;
+  background: rgba(250, 250, 249, 0.92) !important;
   --vp-nav-bg-color: transparent;
 }
 
 .dark .VPNav {
   background: rgba(8, 6, 15, 0.95) !important;
-  border-bottom-color: rgba(255,255,255,0.07) !important;
+  border-bottom-color: rgba(255, 255, 255, 0.07) !important;
   /* Override every VitePress nav background variable */
   --vp-nav-bg-color: transparent;
   --vp-c-bg-nav: transparent;
@@ -94,8 +98,12 @@ body {
 }
 
 /* Hide the right-side elements that create dead space */
-.VPNavBarAppearance,
 .VPNavBarExtra {
+  display: none !important;
+}
+
+/* Remove the divider line before the dark mode toggle */
+.VPNavBarAppearance::before {
   display: none !important;
 }
 
@@ -121,20 +129,35 @@ body {
   color: var(--vp-c-brand-1) !important;
 }
 
+/* Wrapper needs to flex center its contents so the pill floats in the middle */
+.VPNavBarMenuGroup {
+  display: flex !important;
+  align-items: center !important;
+  height: var(--vp-nav-height, 64px) !important;
+}
+
 /* Version dropdown pill */
 .VPNavBarMenuGroup .button {
-  font-size: 0.78rem !important;
-  font-weight: 600;
-  background: rgba(139,92,246,0.1) !important;
-  border: none !important;
-  border-radius: 6px !important;
-  padding: 3px 11px !important;
-  transition: all 0.2s ease;
-  color: #a78bfa !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  background: rgba(139, 92, 246, 0.08) !important;
+  border: 1px solid rgba(139, 92, 246, 0.3) !important;
+  border-radius: 999px !important;
+  padding: 0 10px !important;
+  transition: all 0.18s ease;
+  color: #8b5cf6 !important;
+  height: 26px !important;
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px; /* for the text and SVG arrow */
+  margin-right: 20px;
 }
 
 .VPNavBarMenuGroup .button:hover {
-  background: rgba(139,92,246,0.2) !important;
+  background: rgba(139, 92, 246, 0.18) !important;
+  border-color: rgba(139, 92, 246, 0.5) !important;
 }
 
 /* Remove the purple glow / focus ring on the version pill — all states */
@@ -154,8 +177,8 @@ body {
 .VPNavBarMenuGroup.active .button,
 .VPNavBarMenuGroup.open .button {
   box-shadow: none !important;
-  background: rgba(139,92,246,0.14) !important;
-  border-color: rgba(139,92,246,0.35) !important;
+  background: rgba(139, 92, 246, 0.14) !important;
+  border-color: rgba(139, 92, 246, 0.35) !important;
 }
 
 /* ══════════════════════════════════════════
@@ -170,7 +193,7 @@ body {
 .dark .VPSidebar {
   /* Match the nav background exactly — no transparency so nothing bleeds */
   background: #08060f !important;
-  border-right-color: rgba(255,255,255,0.07) !important;
+  border-right-color: rgba(255, 255, 255, 0.07) !important;
 }
 
 /* Section group title */
@@ -202,7 +225,7 @@ body {
 }
 
 .VPSidebarItem.is-active > .item::before {
-  content: '';
+  content: "";
   position: absolute;
   left: -12px;
   top: 50%;
@@ -250,7 +273,7 @@ body {
 }
 
 .VPDoc h2::before {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   top: 50%;
@@ -282,35 +305,37 @@ body {
   font-size: 0.84em !important;
   padding: 2px 6px !important;
   border-radius: 5px !important;
-  background: rgba(139,92,246,0.09) !important;
-  border: 1px solid rgba(139,92,246,0.2) !important;
+  background: rgba(139, 92, 246, 0.09) !important;
+  border: 1px solid rgba(139, 92, 246, 0.2) !important;
   color: #a78bfa !important;
   font-weight: 500 !important;
   -webkit-text-fill-color: #a78bfa !important;
 }
 
 /* ── Code blocks ── */
-div[class*='language-'] {
+div[class*="language-"] {
   border-radius: 10px !important;
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.07) !important;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.25), 0 0 0 0 transparent;
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.25),
+    0 0 0 0 transparent;
   margin: 20px 0 !important;
   background: #0d0b18 !important;
 }
 
-div[class*='language-'] .shiki {
+div[class*="language-"] .shiki {
   background: transparent !important;
 }
 
-div[class*='language-'] code {
+div[class*="language-"] code {
   font-family: var(--vp-font-family-mono) !important;
   font-size: 0.875rem !important;
   line-height: 1.8 !important;
 }
 
 /* Language label */
-div[class*='language-']::before {
+div[class*="language-"]::before {
   font-family: var(--vp-font-family-mono);
   font-size: 0.68rem;
   font-weight: 600;
@@ -324,29 +349,29 @@ div[class*='language-']::before {
 /* Copy button */
 .vp-copy-code {
   border-radius: 6px !important;
-  background: rgba(139,92,246,0.1) !important;
-  border: 1px solid rgba(139,92,246,0.2) !important;
+  background: rgba(139, 92, 246, 0.1) !important;
+  border: 1px solid rgba(139, 92, 246, 0.2) !important;
   top: 9px !important;
   right: 9px !important;
   transition: all 0.18s ease !important;
 }
 
 .vp-copy-code:hover {
-  background: rgba(139,92,246,0.25) !important;
-  border-color: rgba(139,92,246,0.4) !important;
+  background: rgba(139, 92, 246, 0.25) !important;
+  border-color: rgba(139, 92, 246, 0.4) !important;
 }
 
 /* Code group */
 .vp-code-group {
   border-radius: 10px !important;
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.07) !important;
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
   margin: 20px 0 !important;
 }
 
 .vp-code-group .tabs {
-  background: rgba(13,11,24,0.95) !important;
-  border-bottom: 1px solid rgba(255,255,255,0.07) !important;
+  background: rgba(13, 11, 24, 0.95) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07) !important;
   padding: 0 6px;
 }
 
@@ -370,14 +395,14 @@ div[class*='language-']::before {
 
 /* Highlighted line */
 .highlighted {
-  background: rgba(139,92,246,0.1) !important;
+  background: rgba(139, 92, 246, 0.1) !important;
   border-left: 2px solid var(--vp-c-brand-1) !important;
 }
 
 /* Line numbers */
 .line-numbers-wrapper {
-  border-right: 1px solid rgba(255,255,255,0.06) !important;
-  color: rgba(255,255,255,0.2) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.06) !important;
+  color: rgba(255, 255, 255, 0.2) !important;
 }
 
 /* ── Tables ── */
@@ -393,7 +418,7 @@ div[class*='language-']::before {
 }
 
 .vp-doc table thead tr th {
-  background: rgba(139,92,246,0.08) !important;
+  background: rgba(139, 92, 246, 0.08) !important;
   font-weight: 700 !important;
   font-size: 0.7rem !important;
   letter-spacing: 0.07em;
@@ -416,22 +441,24 @@ div[class*='language-']::before {
 }
 
 .vp-doc table tbody tr:hover td {
-  background: rgba(139,92,246,0.03) !important;
+  background: rgba(139, 92, 246, 0.03) !important;
 }
 
 /* ── Links ── */
 .vp-doc a {
   color: var(--vp-c-brand-1) !important;
   text-decoration: underline;
-  text-decoration-color: rgba(139,92,246,0.3);
+  text-decoration-color: rgba(139, 92, 246, 0.3);
   text-underline-offset: 3px;
-  transition: color 0.18s ease, text-decoration-color 0.18s ease;
+  transition:
+    color 0.18s ease,
+    text-decoration-color 0.18s ease;
   font-weight: 500;
 }
 
 .vp-doc a:hover {
   color: #c4b5fd !important;
-  text-decoration-color: rgba(196,181,253,0.6);
+  text-decoration-color: rgba(196, 181, 253, 0.6);
 }
 
 /* ── Custom blocks ── */
@@ -444,23 +471,23 @@ div[class*='language-']::before {
 }
 
 .custom-block.tip {
-  background: rgba(139,92,246,0.05) !important;
-  border-color: rgba(139,92,246,0.25) !important;
+  background: rgba(139, 92, 246, 0.05) !important;
+  border-color: rgba(139, 92, 246, 0.25) !important;
 }
 
 .custom-block.warning {
-  background: rgba(245,158,11,0.05) !important;
-  border-color: rgba(245,158,11,0.28) !important;
+  background: rgba(245, 158, 11, 0.05) !important;
+  border-color: rgba(245, 158, 11, 0.28) !important;
 }
 
 .custom-block.danger {
-  background: rgba(239,68,68,0.05) !important;
-  border-color: rgba(239,68,68,0.28) !important;
+  background: rgba(239, 68, 68, 0.05) !important;
+  border-color: rgba(239, 68, 68, 0.28) !important;
 }
 
 .custom-block.info {
-  background: rgba(99,102,241,0.05) !important;
-  border-color: rgba(99,102,241,0.25) !important;
+  background: rgba(99, 102, 241, 0.05) !important;
+  border-color: rgba(99, 102, 241, 0.25) !important;
 }
 
 .custom-block .custom-block-title {
@@ -476,7 +503,9 @@ div[class*='language-']::before {
 ══════════════════════════════════════════ */
 .VPDocAsideOutline .outline-link {
   font-size: 0.82rem;
-  transition: color 0.15s ease, padding-left 0.15s ease;
+  transition:
+    color 0.15s ease,
+    padding-left 0.15s ease;
 }
 
 .VPDocAsideOutline .outline-link:hover,
@@ -515,8 +544,8 @@ div[class*='language-']::before {
 }
 
 .VPLink.pager-link:hover {
-  border-color: rgba(139,92,246,0.45) !important;
-  background: rgba(139,92,246,0.05) !important;
+  border-color: rgba(139, 92, 246, 0.45) !important;
+  background: rgba(139, 92, 246, 0.05) !important;
 }
 
 /* ══════════════════════════════════════════
@@ -530,19 +559,32 @@ div[class*='language-']::before {
 
 .VPLocalSearchBox .search-input:focus-within {
   border-color: var(--vp-c-brand-1) !important;
-  box-shadow: 0 0 0 3px rgba(139,92,246,0.12);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12);
 }
 
 /* ══════════════════════════════════════════
    SCROLLBAR
 ══════════════════════════════════════════ */
-::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(139,92,246,0.28); border-radius: 99px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(139,92,246,0.5); }
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.28);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.5);
+}
 
 /* ── Selection ── */
-::selection { background: rgba(139,92,246,0.22); color: inherit; }
+::selection {
+  background: rgba(139, 92, 246, 0.22);
+  color: inherit;
+}
 
 /* ══════════════════════════════════════════
    SOCIAL + BACK-TO-TOP
@@ -551,11 +593,11 @@ div[class*='language-']::before {
   background: linear-gradient(135deg, #7c3aed, #8b5cf6) !important;
   border-radius: 50% !important;
   border: none !important;
-  box-shadow: 0 4px 20px rgba(124,58,237,0.35) !important;
+  box-shadow: 0 4px 20px rgba(124, 58, 237, 0.35) !important;
   transition: all 0.22s ease !important;
 }
 
 .VPBackToTop button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(124,58,237,0.5) !important;
+  box-shadow: 0 8px 28px rgba(124, 58, 237, 0.5) !important;
 }
