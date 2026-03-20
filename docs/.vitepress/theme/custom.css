@@ -26,9 +26,11 @@
 }
 
 .dark {
-  --wc-surface: #0a0815;
-  --wc-surface-2: #120f22;
+  --wc-surface: #08060f;          /* same as nav rgba(8,6,15) */
+  --wc-surface-2: #100d20;
   --wc-border: rgba(139, 92, 246, 0.2);
+  /* VitePress reads this for the sidebar AND the nav title area */
+  --vp-sidebar-bg-color: #08060f;
 }
 
 /* ── Global base ── */
@@ -43,33 +45,58 @@ body {
 /* ══════════════════════════════════════════
    NAV BAR
 ══════════════════════════════════════════ */
+
+/*
+  VitePress structure:
+    .VPNav
+      .VPNavBar
+        .VPNavBarTitle   ← gets sidebar bg color → two-tone effect
+        .VPNavBarContent
+          .VPNavBarMenu
+          .VPNavBarAppearance  ← theme toggle, causes right dead space
+          .VPNavBarSocialLinks
+          .VPNavBarExtra       ← kebab, causes right dead space
+  Strategy: colour only .VPNav, make everything inside transparent.
+*/
+
+/* Outer shell: single uniform background across full width */
 .VPNav {
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border-bottom: 1px solid var(--wc-border) !important;
-  background: rgba(250,250,249,0.9) !important;
-  /* Force nav to sit above sidebar z-index split */
-  position: sticky !important;
+  background: rgba(250,250,249,0.92) !important;
+  --vp-nav-bg-color: transparent;
 }
 
 .dark .VPNav {
-  background: rgba(8, 6, 15, 0.92) !important;
+  background: rgba(8, 6, 15, 0.95) !important;
   border-bottom-color: rgba(255,255,255,0.07) !important;
+  /* Override every VitePress nav background variable */
+  --vp-nav-bg-color: transparent;
+  --vp-c-bg-nav: transparent;
+  --vp-c-bg-soft: transparent;
 }
 
-/* Remove the two-tone divider that shows between sidebar and nav content */
-.VPNavBar .divider {
-  display: none !important;
-}
-
-/* Ensure nav bar is full width with a single background */
-.VPNavBar {
+/* NavBar row and the title cell: both transparent */
+.VPNavBar,
+.VPNavBarTitle {
   background: transparent !important;
   border-bottom: none !important;
 }
 
+/* Kill the vertical rule between title and content */
+.VPNavBar .divider {
+  display: none !important;
+}
+
 .VPNavBarTitle {
   border-right: none !important;
+}
+
+/* Hide the right-side elements that create dead space */
+.VPNavBarAppearance,
+.VPNavBarExtra {
+  display: none !important;
 }
 
 /* Logo text */
@@ -98,17 +125,37 @@ body {
 .VPNavBarMenuGroup .button {
   font-size: 0.78rem !important;
   font-weight: 600;
-  background: rgba(139,92,246,0.08) !important;
-  border: 1px solid rgba(139,92,246,0.22) !important;
-  border-radius: 999px !important;
+  background: rgba(139,92,246,0.1) !important;
+  border: none !important;
+  border-radius: 6px !important;
   padding: 3px 11px !important;
   transition: all 0.2s ease;
-  color: #8b5cf6 !important;
+  color: #a78bfa !important;
 }
 
 .VPNavBarMenuGroup .button:hover {
-  background: rgba(139,92,246,0.18) !important;
-  border-color: rgba(139,92,246,0.45) !important;
+  background: rgba(139,92,246,0.2) !important;
+}
+
+/* Remove the purple glow / focus ring on the version pill — all states */
+.VPNavBarMenuGroup .button,
+.VPFlyout .button,
+.VPNavBarMenuGroup .button:focus,
+.VPNavBarMenuGroup .button:focus-visible,
+.VPFlyout .button:focus,
+.VPFlyout .button:focus-visible {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Active / open states — VitePress uses .active, .open, or .isOpen */
+.VPFlyout.active .button,
+.VPFlyout.open .button,
+.VPNavBarMenuGroup.active .button,
+.VPNavBarMenuGroup.open .button {
+  box-shadow: none !important;
+  background: rgba(139,92,246,0.14) !important;
+  border-color: rgba(139,92,246,0.35) !important;
 }
 
 /* ══════════════════════════════════════════
@@ -121,8 +168,9 @@ body {
 }
 
 .dark .VPSidebar {
-  background: rgba(8, 6, 15, 0.9) !important;
-  backdrop-filter: blur(12px);
+  /* Match the nav background exactly — no transparency so nothing bleeds */
+  background: #08060f !important;
+  border-right-color: rgba(255,255,255,0.07) !important;
 }
 
 /* Section group title */
