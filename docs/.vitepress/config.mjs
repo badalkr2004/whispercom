@@ -7,7 +7,7 @@ export default defineConfig({
 
   head: [
     ["link", { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" }],
-    ["meta", { name: "theme-color", content: "#7c3aed" }],
+    ["meta", { name: "theme-color", content: "#8b5cf6" }],
     ["meta", { property: "og:type", content: "website" }],
     ["meta", { property: "og:title", content: "whispercom — AI Git CLI" }],
     [
@@ -17,13 +17,28 @@ export default defineConfig({
         content: "Professional AI-powered git CLI for conventional commits",
       },
     ],
+    [
+      "link",
+      {
+        rel: "preconnect",
+        href: "https://fonts.googleapis.com",
+      },
+    ],
+    [
+      "link",
+      {
+        rel: "preconnect",
+        href: "https://fonts.gstatic.com",
+        crossorigin: "",
+      },
+    ],
   ],
 
   themeConfig: {
     logo: { src: "/logo.svg", alt: "whispercom" },
 
     nav: [
-      { text: "Guide", link: "/guide/getting-started" },
+      { text: "Guide", link: "/guide/introduction" },
       { text: "Reference", link: "/reference/commands" },
       { text: "Providers", link: "/guide/providers" },
       {
@@ -82,12 +97,21 @@ export default defineConfig({
       pattern: "https://github.com/badalkr2004/whispercom/edit/main/docs/:path",
       text: "Edit this page on GitHub",
     },
+
+    lastUpdated: {
+      text: "Updated at",
+      formatOptions: {
+        dateStyle: "short",
+        timeStyle: "short",
+      },
+    },
   },
 
   markdown: {
     theme: {
-      light: "github-light",
-      dark: "one-dark-pro",
+      light: "vitesse-light",
+      dark: "vitesse-dark",
     },
+    lineNumbers: true,
   },
 });

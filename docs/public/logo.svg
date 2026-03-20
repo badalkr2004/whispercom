@@ -1,18 +1,55 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#6d28d9" stop-opacity="0.08"/>
+    </linearGradient>
+    <linearGradient id="stroke-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="dot-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#c4b5fd"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
   <!-- Background circle -->
-  <circle cx="32" cy="32" r="30" fill="#7c3aed" opacity="0.12"/>
+  <circle cx="32" cy="32" r="30" fill="url(#bg-grad)"/>
+
+  <!-- Outer ring subtle -->
+  <circle cx="32" cy="32" r="29.5" stroke="url(#stroke-grad)" stroke-width="0.75" stroke-opacity="0.4"/>
+
   <!-- Terminal bracket left -->
-  <path d="M14 22 L6 32 L14 42" stroke="#7c3aed" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M15 21 L7 32 L15 43" stroke="url(#stroke-grad)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+
   <!-- Terminal bracket right -->
-  <path d="M50 22 L58 32 L50 42" stroke="#7c3aed" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <!-- Git branch dot (commit) -->
-  <circle cx="32" cy="24" r="4" fill="#7c3aed"/>
-  <!-- Git branch line down -->
-  <line x1="32" y1="28" x2="32" y2="36" stroke="#7c3aed" stroke-width="2.5" stroke-linecap="round"/>
-  <!-- AI sparkle left -->
-  <circle cx="22" cy="38" r="2.5" fill="#a855f7" opacity="0.8"/>
-  <!-- AI sparkle right -->
-  <circle cx="42" cy="38" r="2.5" fill="#a855f7" opacity="0.8"/>
+  <path d="M49 21 L57 32 L49 43" stroke="url(#stroke-grad)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+
+  <!-- Git vertical line -->
+  <line x1="32" y1="18" x2="32" y2="28" stroke="url(#stroke-grad)" stroke-width="2.5" stroke-linecap="round" filter="url(#glow)"/>
+
+  <!-- Top commit dot -->
+  <circle cx="32" cy="15" r="4.5" fill="url(#dot-grad)" filter="url(#glow)"/>
+
+  <!-- Branch lines -->
+  <path d="M32 28 L22 38" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-opacity="0.7"/>
+  <path d="M32 28 L42 38" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-opacity="0.7"/>
+
+  <!-- Left branch dot -->
+  <circle cx="22" cy="40" r="3" fill="#c4b5fd" filter="url(#glow)"/>
+
+  <!-- Right branch dot -->
+  <circle cx="42" cy="40" r="3" fill="#c4b5fd" filter="url(#glow)"/>
+
   <!-- Bottom merge dot -->
-  <circle cx="32" cy="40" r="3" fill="#a855f7"/>
+  <circle cx="32" cy="50" r="3.5" fill="url(#dot-grad)" filter="url(#glow)"/>
+
+  <!-- Merge lines -->
+  <path d="M22 40 L32 48" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-opacity="0.6"/>
+  <path d="M42 40 L32 48" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-opacity="0.6"/>
 </svg>
