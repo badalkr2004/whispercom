@@ -1,6 +1,6 @@
 import { generateText } from "ai";
 import { PROVIDERS, getApiKey } from "./config.js";
-import fs from 'fs'
+
 
 const CONV_TYPES = [
   "feat",
@@ -21,7 +21,6 @@ export async function generateCommitMessages(diff, count, cfg) {
   if (!provider) throw new Error(`Unknown provider: ${cfg.provider}`);
 
   const apiKey = getApiKey(cfg.provider, cfg);
-  fs.appendFileSync('debug.txt', `API Key is: ${apiKey}\n`);
   if (!apiKey) {
     const envName = provider.envKey;
     throw new Error(
@@ -32,22 +31,29 @@ export async function generateCommitMessages(diff, count, cfg) {
   }
 
   const model = await provider.getModel(cfg.model, cfg);
-  fs.appendFileSync('debug.txt', `model: ${JSON.stringify(model)}\n`);
-
   let text;
   try {
     ({ text } = await generateText({
       model,
-      maxTokens: 1024,
+      maxTokens: 2048,
       system: `You write git commit messages following Conventional Commits.
 Format: <type>(<optional scope>): <description>
 Types: ${CONV_TYPES.join(", ")}
 Rules:
 - Subject line ≤50 chars, imperative mood ("add" not "added")
 - Scope: lowercase, one word or hyphenated
-- Body: only when genuinely needed, ≤72 chars per line, explains WHAT and WHY`,
-      prompt: `Analyze this diff. Return ONLY a raw JSON array, no markdown, no commentary:
-[{"subject":"feat(scope): description","body":"optional body or empty string","reasoning":"one sentence why"}]
+- Body: only when genuinely needed, ≤72 chars per line, explains WHAT and WHY
+- You MUST only output a raw, valid JSON array of objects.`,
+      prompt: `Analyze this diff. Return ONLY a valid JSON array. Do not include markdown codeblocks. Every object MUST have exactly these 3 string keys: "subject", "body", "reasoning".
+
+Example format required:
+[
+  {
+    "subject": "feat(scope): description here",
+    "body": "optional body explaining why",
+    "reasoning": "one sentence why"
+  }
+]
 
 Generate exactly ${count} suggestions. Vary them:
 - one high-level/impact-focused
@@ -59,8 +65,6 @@ ${diff}
 \`\`\``,
     }));
 
-    fs.appendFileSync('debug.txt', `Ai response: ${text}\n`);
-
   } catch (e) {
     const msg = e?.message ?? String(e);
     // Surface API-level errors (wrong model ID, quota exceeded, bad base URL, etc.)
@@ -71,19 +75,16 @@ ${diff}
     );
   }
 
-  const cleaned = text
-    .trim()
-    .replace(/^```json\s*/i, "")
-    .replace(/^```\s*/i, "")
-    .replace(/```\s*$/i, "")
-    .trim();
+  // Robustly extract the JSON array, ignoring `<think>` blocks or markdown formatting
+  const match = text.match(/\[[\s\S]*\]/);
+  const jsonString = match ? match[0] : text;
 
   let parsed;
   try {
-    parsed = JSON.parse(cleaned);
+    parsed = JSON.parse(jsonString);
   } catch {
     throw new Error(
-      `AI returned unparseable output. Try again or switch to a different model.`,
+      `AI returned unparseable output. Try again or switch to a different model.\n\nRaw output:\n${text}`,
     );
   }
 
