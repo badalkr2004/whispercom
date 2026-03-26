@@ -25,6 +25,7 @@ Professional AI-powered git CLI built with **Ink** (React for terminals) and the
 | Google Gemini | `GOOGLE_GENERATIVE_AI_API_KEY` |
 | Mistral AI    | `MISTRAL_API_KEY`              |
 | Groq          | `GROQ_API_KEY`                 |
+| Custom        | Configured via `whis configure`|
 
 ## Install
 
@@ -35,12 +36,12 @@ npm install -g whispercom
 ## Setup
 
 ```bash
-# Set your API key (example: Anthropic)
-export ANTHROPIC_API_KEY=sk-ant-...
-
-# Configure provider + model (saved to ~/.config/whispercom/config.json)
+# Configure your AI provider, model, and API key
+# (Key safely stored in ~/.config/whispercom/config.json)
 whis configure
 ```
+
+Alternatively, set your API key as an environment variable (e.g., `export GROQ_API_KEY=gsk_...`). Environment variables always override stored keys.
 
 ## Usage
 
@@ -63,6 +64,9 @@ whis log
 
 # Switch branches
 whis branch
+
+# Check version
+whis --version
 ```
 
 ## TUI Controls
@@ -74,7 +78,8 @@ whis branch
 | `↑↓` / `j` `k` | Navigate              |
 | `1`–`9`        | Jump to suggestion    |
 | `enter`        | Confirm + commit      |
-| `e`            | Edit selected message |
+| `e`            | Edit selected subject |
+| `b`            | Edit selected body    |
 | `c`            | Switch provider/model |
 | `q`            | Quit                  |
 
@@ -100,12 +105,14 @@ whis branch
 
 ### Branch switcher
 
-| Key     | Action        |
-| ------- | ------------- |
-| type    | Fuzzy filter  |
-| `↑↓`    | Navigate      |
-| `enter` | Switch branch |
-| `esc`   | Cancel        |
+| Key       | Action                       |
+| --------- | ---------------------------- |
+| type      | Fuzzy filter (Filter mode)   |
+| `Tab`     | Toggle Navigate/Filter mode  |
+| `j` / `k` | Navigate (Navigate mode)     |
+| `enter`   | Switch branch                |
+| `PgUp/Dn` | Page branches                |
+| `esc`     | Cancel                       |
 
 ## Configuration file
 
@@ -114,11 +121,17 @@ Settings are stored in `~/.config/whispercom/config.json`:
 ```json
 {
   "provider": "anthropic",
-  "model": "claude-sonnet-4-5"
+  "model": "claude-sonnet-4-5",
+  "apiKey": "sk-ant-...",
+  "baseUrl": "https://openrouter.ai/api/v1" 
 }
 ```
 
-Run `whis configure` at any time to change provider or model.
+- **`apiKey`** is optional (you can use environment variables instead).
+- **`baseUrl`** is only used when the "Custom (OpenAI-compatible)" provider is selected.
+- **`model`** can be any valid model ID (you can type it manually in `whis configure`).
+
+Run `whis configure` at any time to safely update these settings.
 
 ## Contributing
 

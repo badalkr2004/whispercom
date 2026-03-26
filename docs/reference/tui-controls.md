@@ -13,12 +13,13 @@ Shown after AI generates suggestions. Navigate and confirm your commit.
 | `1` – `9` | Jump directly to suggestion number |
 | `Enter` | Confirm and commit the selected message |
 | `e` | Edit the subject line of the selected suggestion |
+| `b` | Edit the body text of the selected suggestion |
 | `c` | Open the configure wizard to switch provider/model |
 | `q` | Quit without committing |
 
 ### Editing a message
 
-Press `e` to enter edit mode on the selected suggestion. The subject line becomes a text buffer:
+Press `e` to enter edit mode for the subject, or `b` to edit the body. A text buffer will appear:
 
 | Key | Action |
 |-----|--------|
@@ -67,18 +68,28 @@ Graph lines are colored by branch column. Ref badges (HEAD, remote branches, tag
 
 ## Branch Switcher
 
-Shown when you run `whis branch`.
+Shown when you run `whis branch`. The switcher has two modes: **Filter Mode** (default) and **Navigate Mode**.
 
+**Filter Mode** (typing updates the search query):
 | Key | Action |
 |-----|--------|
 | Any characters | Filter branches (fuzzy match) |
 | `Backspace` | Remove last filter character |
-| `↑` / `Ctrl+K` | Move selection up |
-| `↓` / `Ctrl+J` | Move selection down |
+| `Tab` | Switch to Navigate Mode |
 | `Enter` | Switch to the selected branch |
 | `Esc` / `q` | Cancel |
 
-The current branch is marked with a ✔ and highlighted in green. Up to 20 results are shown; type more characters to narrow the list.
+**Navigate Mode** (`j`/`k` move the cursor instead of typing):
+| Key | Action |
+|-----|--------|
+| `Tab` / Any char | Switch back to Filter Mode |
+| `↑` / `k` | Move selection up |
+| `↓` / `j` | Move selection down |
+| `PgUp` / `PgDn` | Page branches (15 at a time) |
+| `Enter` | Switch to the selected branch |
+| `Esc` | Cancel |
+
+The current branch is marked with a ✔ and highlighted. Filtered results are paginated so you can reach any branch.
 
 ---
 
@@ -91,6 +102,11 @@ Shown when you run `whis configure` or press `c` in the commit picker.
 | `↑` / `k` | Move up |
 | `↓` / `j` | Move down |
 | `Enter` | Confirm selection / advance to next step |
-| `Esc` / `q` | Go back (on model step) or cancel (on provider step) |
+| `Esc` / `q` | Go back or cancel |
+| Any characters | Type input (when on text-entry steps) |
 
-Providers with a detected API key are shown with a ✔ checkmark. Providers with a missing key show a ⚠ warning but can still be selected.
+**Steps in the wizard:**
+1. **Provider**: Select your AI provider. (Shows a ✔ if a key is already detected in env or config).
+2. **Model**: Select a preset model, or choose `[ + Enter model ID manually ]` to type an ID.
+3. **API Key**: Type your key to save it, or leave blank to keep using an environment variable.
+4. **Base URL**: (*Only for the Custom provider*) Type the base URL for the OpenAI-compatible endpoint.

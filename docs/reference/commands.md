@@ -111,3 +111,14 @@ Print the help text.
 whis --help
 whis -h
 ```
+
+---
+
+## `whis --version`
+
+Print the current version of whispercom.
+
+```bash
+whis --version
+whis -v
+```

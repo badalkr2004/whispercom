@@ -1,5 +1,6 @@
 import { generateText } from "ai";
 import { PROVIDERS, getApiKey } from "./config.js";
+import fs from 'fs'
 
 const CONV_TYPES = [
   "feat",
@@ -20,6 +21,7 @@ export async function generateCommitMessages(diff, count, cfg) {
   if (!provider) throw new Error(`Unknown provider: ${cfg.provider}`);
 
   const apiKey = getApiKey(cfg.provider, cfg);
+  fs.appendFileSync('debug.txt', `API Key is: ${apiKey}\n`);
   if (!apiKey) {
     const envName = provider.envKey;
     throw new Error(
@@ -30,6 +32,7 @@ export async function generateCommitMessages(diff, count, cfg) {
   }
 
   const model = await provider.getModel(cfg.model, cfg);
+  fs.appendFileSync('debug.txt', `model: ${JSON.stringify(model)}\n`);
 
   let text;
   try {
@@ -55,6 +58,9 @@ Generate exactly ${count} suggestions. Vary them:
 ${diff}
 \`\`\``,
     }));
+
+    fs.appendFileSync('debug.txt', `Ai response: ${text}\n`);
+
   } catch (e) {
     const msg = e?.message ?? String(e);
     // Surface API-level errors (wrong model ID, quota exceeded, bad base URL, etc.)

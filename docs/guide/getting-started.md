@@ -28,10 +28,12 @@ Run the interactive configuration wizard to choose your AI provider and model:
 whis configure
 ```
 
-The wizard will show all supported providers and highlight which ones have an API key already set in your environment. Select your provider, then select a model — your choice is saved to `~/.config/whispercom/config.json`.
+The wizard will show all supported providers. Select your provider, then select a model. It will also ask for your **API Key** (which is safely saved locally so you don't have to keep setting environment variables).
 
-::: tip Setting your API key
-Before running `whis configure`, export your API key so the wizard can detect it:
+All your choices are saved to `~/.config/whispercom/config.json`.
+
+::: tip Environment Variables
+You can also use environment variables if you prefer not to store keys in the config file (great for CI/CD). Environment variables always override stored keys:
 
 ```bash
 # Bash / Zsh
