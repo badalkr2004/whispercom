@@ -1,7 +1,10 @@
+import { createRequire } from "module";
 
+const _require = createRequire(import.meta.url);
+const { version } = _require("../package.json");
 
 const HELP = `
-\x1b[36m\x1b[1mwhis\x1b[0m v1.0.0  —  professional AI git CLI
+\x1b[36m\x1b[1mwhis\x1b[0m v${version}  —  professional AI git CLI
 
 \x1b[1mCommands:\x1b[0m
   \x1b[33mcommit\x1b[0m             Generate AI commit message (default)
@@ -33,6 +36,7 @@ function parseArgs(argv) {
     count: 3,
     limit: 80,
     help: false,
+    version: false,
   };
 
   for (let i = 0; i < args.length; i++) {
@@ -43,10 +47,19 @@ function parseArgs(argv) {
     else if (a === "configure" || a === "config") opts.command = "configure";
     else if (a === "--stage" || a === "-s") opts.stage = true;
     else if (a === "--head") opts.head = true;
-    else if (a === "--count" || a === "-n")
-      opts.count = parseInt(args[++i], 10) || 3;
-    else if (a === "--limit") opts.limit = parseInt(args[++i], 10) || 80;
+    else if (a === "--count" || a === "-n") {
+      const raw = args[++i];
+      const parsed = parseInt(raw, 10);
+      if (isNaN(parsed) || parsed < 1) {
+        process.stderr.write(
+          `\x1b[33m⚠  Invalid --count value "${raw}", using default 3.\x1b[0m\n`,
+        );
+      } else {
+        opts.count = parsed;
+      }
+    } else if (a === "--limit") opts.limit = parseInt(args[++i], 10) || 80;
     else if (a === "--help" || a === "-h") opts.help = true;
+    else if (a === "--version" || a === "-v") opts.version = true;
   }
 
   return opts;
@@ -54,6 +67,11 @@ function parseArgs(argv) {
 
 async function main() {
   const opts = parseArgs(process.argv);
+
+  if (opts.version) {
+    process.stdout.write(`whis v${version}\n`);
+    process.exit(0);
+  }
 
   if (opts.help) {
     process.stdout.write(HELP + "\n");

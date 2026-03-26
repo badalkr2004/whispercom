@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Box, Text, useInput } from "ink";
-import { SYMBOLS, BRANCH_COLORS } from "../core/theme.js";
+import { SYMBOLS, BRANCH_COLORS, branchColor } from "../core/theme.js";
 import { KeyHint, StatusBar } from "./StatusBar.js";
 
 const PAGE = 20;
@@ -39,8 +39,7 @@ function GraphCommitRow({ line, isSelected }) {
 
   // Color graph characters by column
   const coloredGraph = graphPart.split("").map((ch, ci) => {
-    const colorIdx = Math.floor(ci / 2) % BRANCH_COLORS.length;
-    const color = BRANCH_COLORS[colorIdx];
+    const color = branchColor(Math.floor(ci / 2));
     return (
       <Text key={ci} color={color}>
         {ch}

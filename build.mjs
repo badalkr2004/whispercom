@@ -3,7 +3,7 @@
 
 import { build } from "esbuild";
 import { readdirSync, statSync } from "fs";
-import { join } from "path";
+import { join, resolve } from "path";
 
 const SRC = "src";
 const OUT = "dist";
@@ -26,7 +26,8 @@ const entryPoints = walk(SRC);
 // 2) all other files — without the banner
 
 const indexEntry = [`${SRC}/index.js`];
-const otherEntries = entryPoints.filter((f) => f !== `${SRC}\\index.js` && f !== `${SRC}/index.js`);
+const indexResolved = resolve(SRC, "index.js");
+const otherEntries = entryPoints.filter((f) => resolve(f) !== indexResolved);
 
 const sharedOptions = {
   outdir: OUT,

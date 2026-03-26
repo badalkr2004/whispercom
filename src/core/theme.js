@@ -55,17 +55,6 @@ export const SYMBOLS = {
   horiz: "─",
 };
 
-export const GRAPH_CHARS = {
-  commit: "●",
-  branch: "│",
-  merge_l: "╮",
-  merge_r: "╯",
-  fork_l: "╭",
-  fork_r: "╰",
-  cross: "┼",
-  horiz: "─",
-  space: " ",
-};
 
 export function typeColor(type) {
   return COMMIT_TYPE_COLORS[type] || "white";

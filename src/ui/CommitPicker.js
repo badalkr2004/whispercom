@@ -32,20 +32,23 @@ export function CommitPicker({
 }) {
   const [suggestions, setSuggestions] = useState(initial);
   const [selected, setSelected] = useState(0);
-  const [editMode, setEditMode] = useState(false);
-  const [editBuf, setEditBuf] = useState(initial[0]?.subject ?? "");
+  // editField: null | "subject" | "body"
+  const [editField, setEditField] = useState(null);
+  const [editBuf, setEditBuf] = useState("");
 
   useInput((input, key) => {
-    if (editMode) {
+    if (editField) {
       if (key.return) {
-        const updated = suggestions.map((s, i) =>
-          i === selected ? { ...s, subject: editBuf } : s,
-        );
+        const updated = suggestions.map((s, i) => {
+          if (i !== selected) return s;
+          return editField === "subject"
+            ? { ...s, subject: editBuf }
+            : { ...s, body: editBuf };
+        });
         setSuggestions(updated);
-        setEditMode(false);
+        setEditField(null);
       } else if (key.escape) {
-        setEditBuf(suggestions[selected].subject);
-        setEditMode(false);
+        setEditField(null);
       } else if (key.backspace || key.delete) {
         setEditBuf((b) => b.slice(0, -1));
       } else if (input && !key.ctrl && !key.meta) {
@@ -57,18 +60,19 @@ export function CommitPicker({
     if (key.upArrow || input === "k") {
       const next = (selected - 1 + suggestions.length) % suggestions.length;
       setSelected(next);
-      setEditBuf(suggestions[next].subject);
     } else if (key.downArrow || input === "j") {
       const next = (selected + 1) % suggestions.length;
       setSelected(next);
-      setEditBuf(suggestions[next].subject);
     } else if (key.return) {
       const s = suggestions[selected];
       const msg = s.body ? `${s.subject}\n\n${s.body}` : s.subject;
       onConfirm(msg);
     } else if (input === "e") {
-      setEditMode(true);
+      setEditField("subject");
       setEditBuf(suggestions[selected].subject);
+    } else if (input === "b") {
+      setEditField("body");
+      setEditBuf(suggestions[selected].body ?? "");
     } else if (input === "c") {
       onConfigure?.();
     } else if (input === "q" || (key.ctrl && input === "c")) {
@@ -77,7 +81,6 @@ export function CommitPicker({
       const idx = parseInt(input, 10) - 1;
       if (idx < suggestions.length) {
         setSelected(idx);
-        setEditBuf(suggestions[idx].subject);
       }
     }
   });
@@ -122,10 +125,10 @@ export function CommitPicker({
         })}
       </Box>
 
-      {editMode && (
+      {editField && (
         <Box paddingX={1} gap={1}>
           <Text color="yellow" bold>
-            Edit:{" "}
+            Edit {editField}:{" "}
           </Text>
           <Text>{editBuf}</Text>
           <Text color="yellow">▋</Text>
@@ -136,7 +139,8 @@ export function CommitPicker({
         keys={[
           { key: "↑↓", label: "navigate" },
           { key: "enter", label: "confirm" },
-          { key: "e", label: "edit" },
+          { key: "e", label: "edit subject" },
+          { key: "b", label: "edit body" },
           { key: "1-9", label: "jump" },
           { key: "c", label: "configure" },
           { key: "q", label: "quit" },

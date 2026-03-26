@@ -1,7 +1,9 @@
 import React, { useState, useMemo } from "react";
 import { Box, Text, useInput } from "ink";
-import { SYMBOLS, BRANCH_COLORS } from "../core/theme.js";
+import { SYMBOLS, branchColor } from "../core/theme.js";
 import { KeyHint, StatusBar } from "./StatusBar.js";
+
+const PAGE = 15;
 
 function fuzzy(query, str) {
   if (!query) return true;
@@ -15,7 +17,7 @@ function fuzzy(query, str) {
 }
 
 function BranchRow({ name, isCurrent, isSelected, colorIdx }) {
-  const color = BRANCH_COLORS[colorIdx % BRANCH_COLORS.length];
+  const color = branchColor(colorIdx);
   return (
     <Box gap={1}>
       <Text color={isSelected ? "cyan" : "gray"}>
@@ -43,29 +45,89 @@ function BranchRow({ name, isCurrent, isSelected, colorIdx }) {
 export function BranchSwitcher({ branches, currentBranch, onSwitch, onQuit }) {
   const [query, setQuery] = useState("");
   const [selIdx, setSelIdx] = useState(0);
+  const [page, setPage] = useState(0);
+  // navMode: when true j/k move selection; when false printable keys type into filter
+  const [navMode, setNavMode] = useState(false);
 
   const filtered = useMemo(
     () => branches.filter((b) => fuzzy(query, b)),
     [branches, query],
   );
 
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE));
+  const visibleBranches = filtered.slice(page * PAGE, (page + 1) * PAGE);
+  // adjusted selection index within the visible slice
+  const visibleSelIdx = selIdx - page * PAGE;
+
   useInput((input, key) => {
-    if (key.upArrow || (key.ctrl && input === "k")) {
-      setSelIdx((i) => Math.max(0, i - 1));
-    } else if (key.downArrow || (key.ctrl && input === "j")) {
-      setSelIdx((i) => Math.min(filtered.length - 1, i + 1));
-    } else if (key.return) {
-      const branch = filtered[selIdx];
-      if (branch && branch !== currentBranch) onSwitch(branch);
-      else onQuit();
-    } else if (key.escape || input === "q") {
-      onQuit();
-    } else if (key.backspace || key.delete) {
-      setQuery((q) => q.slice(0, -1));
-      setSelIdx(0);
-    } else if (input && !key.ctrl && !key.meta) {
-      setQuery((q) => q + input);
-      setSelIdx(0);
+    if (key.tab) {
+      // Toggle between filter mode and navigate mode
+      setNavMode((m) => !m);
+      return;
+    }
+
+    if (navMode) {
+      // Navigate mode: j/k / arrows move selection; printable char re-enters filter mode
+      if (key.upArrow || input === "k") {
+        const next = Math.max(0, selIdx - 1);
+        setSelIdx(next);
+        setPage(Math.floor(next / PAGE));
+      } else if (key.downArrow || input === "j") {
+        const next = Math.min(filtered.length - 1, selIdx + 1);
+        setSelIdx(next);
+        setPage(Math.floor(next / PAGE));
+      } else if (key.pageUp) {
+        const newPage = Math.max(0, page - 1);
+        setPage(newPage);
+        setSelIdx(newPage * PAGE);
+      } else if (key.pageDown) {
+        const newPage = Math.min(totalPages - 1, page + 1);
+        setPage(newPage);
+        setSelIdx(newPage * PAGE);
+      } else if (key.return) {
+        const branch = filtered[selIdx];
+        if (branch && branch !== currentBranch) onSwitch(branch);
+        else onQuit();
+      } else if (key.escape) {
+        onQuit();
+      } else if (input && !key.ctrl && !key.meta) {
+        // Any printable char → re-enter filter mode and start new query
+        setNavMode(false);
+        setQuery(input);
+        setSelIdx(0);
+        setPage(0);
+      }
+    } else {
+      // Filter mode: type to search
+      if (key.upArrow) {
+        const next = Math.max(0, selIdx - 1);
+        setSelIdx(next);
+        setPage(Math.floor(next / PAGE));
+      } else if (key.downArrow) {
+        const next = Math.min(filtered.length - 1, selIdx + 1);
+        setSelIdx(next);
+        setPage(Math.floor(next / PAGE));
+      } else if (key.return) {
+        const branch = filtered[selIdx];
+        if (branch && branch !== currentBranch) onSwitch(branch);
+        else onQuit();
+      } else if (key.escape && !query) {
+        onQuit();
+      } else if (key.escape) {
+        setQuery("");
+        setSelIdx(0);
+        setPage(0);
+      } else if (input === "q" && !query) {
+        onQuit();
+      } else if (key.backspace || key.delete) {
+        setQuery((q) => q.slice(0, -1));
+        setSelIdx(0);
+        setPage(0);
+      } else if (input && !key.ctrl && !key.meta) {
+        setQuery((q) => q + input);
+        setSelIdx(0);
+        setPage(0);
+      }
     }
   });
 
@@ -73,37 +135,33 @@ export function BranchSwitcher({ branches, currentBranch, onSwitch, onQuit }) {
     <Box flexDirection="column">
       <StatusBar
         branch={currentBranch}
-        message={`${filtered.length} branches`}
+        message={`${filtered.length} branches  ·  page ${page + 1}/${totalPages}  ·  ${navMode ? "NAV" : "FILTER"} mode`}
       />
 
       <Box paddingX={1} paddingY={1} gap={1}>
-        <Text color="cyan">filter: </Text>
+        <Text color={navMode ? "gray" : "cyan"}>filter: </Text>
         <Text>{query}</Text>
-        <Text color="cyan">▋</Text>
+        {!navMode && <Text color="cyan">▋</Text>}
       </Box>
 
       <Box flexDirection="column" paddingX={1}>
-        {filtered.slice(0, 20).map((b, i) => (
+        {visibleBranches.map((b, i) => (
           <BranchRow
             key={b}
             name={b}
             isCurrent={b === currentBranch}
-            isSelected={i === selIdx}
-            colorIdx={i}
+            isSelected={i === visibleSelIdx}
+            colorIdx={page * PAGE + i}
           />
         ))}
-        {filtered.length > 20 && (
-          <Text color="gray" dimColor>
-            {" "}
-            … {filtered.length - 20} more
-          </Text>
-        )}
       </Box>
 
       <KeyHint
         keys={[
           { key: "↑↓", label: "navigate" },
           { key: "type", label: "filter" },
+          { key: "Tab", label: navMode ? "→ filter mode" : "→ nav mode (j/k)" },
+          { key: "PgUp/Dn", label: "page" },
           { key: "enter", label: "switch" },
           { key: "esc", label: "cancel" },
         ]}

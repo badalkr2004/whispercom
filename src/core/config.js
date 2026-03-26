@@ -105,7 +105,11 @@ export function loadConfig() {
   try {
     if (fs.existsSync(CONFIG_FILE))
       return JSON.parse(fs.readFileSync(CONFIG_FILE, "utf8"));
-  } catch {}
+  } catch (err) {
+    process.stderr.write(
+      `\x1b[33m⚠  Could not parse config file (${CONFIG_FILE}): ${err.message}\n   Re-run \`whis configure\` to reset it.\x1b[0m\n`,
+    );
+  }
   return null;
 }
 

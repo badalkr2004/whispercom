@@ -72,13 +72,16 @@ function App({ opts }) {
 
   async function generate(config, options) {
     setPhase("loading");
-    setStatusMsg(
-      "Analyzing diff with " + PROVIDERS[config.provider]?.label + "…",
-    );
+    const providerLabel = PROVIDERS[config.provider]?.label;
     try {
-      const diff = options.head
-        ? getHeadDiff().slice(0, 10000)
-        : getStagedDiff().slice(0, 10000);
+      const rawDiff = options.head ? getHeadDiff() : getStagedDiff();
+      const LIMIT = 10_000;
+      const truncated = rawDiff.length > LIMIT;
+      const diff = rawDiff.slice(0, LIMIT);
+      setStatusMsg(
+        `Analyzing diff with ${providerLabel}…` +
+          (truncated ? " (diff truncated — only first 10 000 chars sent)" : ""),
+      );
 
       if (!diff.trim()) {
         setError(
@@ -216,6 +219,10 @@ function App({ opts }) {
 }
 
 export async function runCommit(opts) {
+  if (!isGitRepo()) {
+    process.stderr.write("\x1b[31m\u2716  Not inside a git repository.\x1b[0m\n");
+    process.exit(1);
+  }
   const { waitUntilExit } = render(<App opts={opts} />);
   await waitUntilExit();
 }

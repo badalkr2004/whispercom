@@ -61,7 +61,9 @@ export function getUnstagedFiles() {
     .split("\n")
     .filter(Boolean)
     .map((line) => ({
-      status: line.slice(0, 2).trim(),
+      // XY format: index state (col 0) + working-tree state (col 1)
+      // Use the first non-space character to get the most meaningful status
+      status: line[0] !== " " && line[0] !== "?" ? line[0] : line[1],
       path: line.slice(3).trim(),
       staged: line[0] !== " " && line[0] !== "?",
     }));
@@ -119,11 +121,8 @@ export function getLog(limit = 50) {
 }
 
 export function getCommitDiff(hash) {
-  return (
-    run(`git show --stat ${hash}`) +
-    "\n\n" +
-    run(`git show ${hash} -- ":(exclude)*.lock"`)
-  );
+  // Single invocation: --stat header followed by the full patch, lock files excluded
+  return run(`git show --stat --patch ${hash} -- ":(exclude)*.lock"`);
 }
 
 export function getGraphLines(limit = 40) {
