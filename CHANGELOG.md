@@ -6,6 +6,16 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+### Added
+- **Persistent API keys**: API keys entered during \`whis configure\` are now securely stored in \`~/.config/whispercom/config.json\`. You no longer need to set environment variables every terminal session.
+- **Custom Provider**: Added a "Custom (OpenAI-compatible)" provider option for services like OpenRouter, Nebius, or LM Studio. You can configure your own \`baseUrl\` and Model ID.
+- **Manual Model ID Entry**: All providers now have a \`[ + Enter model ID manually ]\` option at the bottom of their list, allowing you to use new or custom models even if they aren't in the preset list.
+
+### Changed
+- Environment variables still take priority over stored config keys (useful for CI/CD).
+- Better API error messages when a model returns invalid output or the connection fails.
+- Updated Google Gemini preset to \`gemini-2.5-pro\`.
+
 ## [1.1.0] - 2026-03-27
 
 ### Added
