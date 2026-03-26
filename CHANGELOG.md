@@ -6,6 +6,8 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-03-27
+
 ### Added
 - **Persistent API keys**: API keys entered during \`whis configure\` are now securely stored in \`~/.config/whispercom/config.json\`. You no longer need to set environment variables every terminal session.
 - **Custom Provider**: Added a "Custom (OpenAI-compatible)" provider option for services like OpenRouter, Nebius, or LM Studio. You can configure your own \`baseUrl\` and Model ID.
@@ -55,6 +57,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Provider + model configuration wizard (`whis configure`)
 - Conventional Commits format enforced by AI prompt
 
-[Unreleased]: https://github.com/badalkr2004/whispercom/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/badalkr2004/whispercom/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/badalkr2004/whispercom/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/badalkr2004/whispercom/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/badalkr2004/whispercom/releases/tag/v1.0.0
