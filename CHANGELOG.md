@@ -6,6 +6,12 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [1.2.2] - 2026-03-31
+
+### Fixed
+- **API Key Injection**: API keys configured via `whis configure` are now properly injected into `process.env`. This fixes an issue where providers like Groq, Anthropic, and Google would throw an unauthorized error in production because they only checked system environment variables and ignored the saved config key.
+
+
 ## [1.2.1] - 2026-03-27
 
 ### Fixed
@@ -62,7 +68,8 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Provider + model configuration wizard (`whis configure`)
 - Conventional Commits format enforced by AI prompt
 
-[Unreleased]: https://github.com/badalkr2004/whispercom/compare/v1.2.1...HEAD
+[Unreleased]: https://github.com/badalkr2004/whispercom/compare/v1.2.2...HEAD
+[1.2.2]: https://github.com/badalkr2004/whispercom/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/badalkr2004/whispercom/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/badalkr2004/whispercom/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/badalkr2004/whispercom/compare/v1.0.0...v1.1.0

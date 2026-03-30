@@ -30,6 +30,9 @@ export async function generateCommitMessages(diff, count, cfg) {
     );
   }
 
+  // Inject the api key into environment variables so SDK providers pick it up
+  process.env[provider.envKey] = apiKey;
+
   const model = await provider.getModel(cfg.model, cfg);
   let text;
   try {
