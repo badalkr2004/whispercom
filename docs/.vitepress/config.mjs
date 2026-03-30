@@ -1,4 +1,12 @@
 import { defineConfig } from "vitepress";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const pkg = JSON.parse(
+  fs.readFileSync(path.join(__dirname, "../../package.json"), "utf8")
+);
 
 export default defineConfig({
   title: "whispercom",
@@ -42,7 +50,7 @@ export default defineConfig({
       { text: "Reference", link: "/reference/commands" },
       { text: "Providers", link: "/guide/providers" },
       {
-        text: "v1.0.0",
+        text: `v${pkg.version}`,
         items: [
           {
             text: "Changelog",
